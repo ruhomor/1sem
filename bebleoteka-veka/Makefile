@@ -33,4 +33,6 @@ fclean: clean bclean
 
 re: fclean all
 
+run: ./memes
+
 rebuild: bclean build
