@@ -12,7 +12,7 @@ int	main()
 	scanf("%d:%d\n%d:%d", &dh, &dm, &ah, &am);
 	resh = ah + dh;
 	resm = am + dm;
-	if (resm >= 60)
+	while (resm >= 60)
 	{
 		resm -= 60;
 		resh++;
