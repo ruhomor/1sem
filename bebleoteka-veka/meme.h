@@ -3,6 +3,7 @@
 # define MEME_H
 
 # include <stdlib.h>
+# include <math.h>
 
 int	summa(int a, int b);
 int	minimum(int a, int b);

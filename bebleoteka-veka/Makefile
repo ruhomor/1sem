@@ -20,7 +20,7 @@ $(NAME):
 	ranlib $(NAME)
 
 build:
-	gcc -Wall -Werror -Wextra $(SRCS) main.c -I$(INCL) -o memes
+	gcc -Wall -Werror -Wextra $(SRCS) main.c -I$(INCL) -lm -o memes
 
 bclean:
 	/bin/rm -f memes
