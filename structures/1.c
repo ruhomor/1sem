@@ -76,23 +76,27 @@ int	lst_del(list **p, list *el, int key, int keynew)
 	{
 		if (el->next == NULL)
 		{
+			printf("deleted: %d\n", el->n);
 			free(el);
 			*p = NULL;
 			return (1);
 		}
+		*p = NULL;
 		return (0);
 	}
 	if (el->next == NULL)
 	{
+		printf("deleted: %d, %d\n", (*p)->n, el->n);
 		free(*p);
 		free(el);
-		p = NULL;
+		*p = NULL;
 		return (1);
 	}
 	else
 	{
+		printf("deleted: %d\n", (*p)->n);
 		free(*p);
-		p = NULL;
+		*p = NULL;
 		return (0);
 	}
 }
@@ -124,7 +128,7 @@ void	lst_map(list *elem, int key, int keynew, int (*f)(list *lst, int key1, int 
 	int	end = 1;
 
 	end = (*f)(elem, key, keynew);
-	while (elem->next && (!(end)))
+	while ((!(end)) && elem->next)
 	{
 		end = (*f)(elem->next, key, keynew);
 		elem = elem->next;
@@ -134,12 +138,14 @@ void	lst_map(list *elem, int key, int keynew, int (*f)(list *lst, int key1, int 
 void	lst_map_root(list **root, list *elem, int key, int keynew, int (*f)(list **root, list *lst, int key1, int keynew))
 {
 	int	end = 1;
+	list	*tmp;
 
 	end = (*f)(root, elem, key, keynew);
-	while (elem->next && (!(end)))
+	while ((!(end)) && elem->next)
 	{
+		tmp = elem->next;
 		end = (*f)(&elem, elem->next, key, keynew);
-		elem = elem->next;
+		elem = tmp;
 	}
 }
 
