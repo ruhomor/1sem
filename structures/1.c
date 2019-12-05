@@ -67,6 +67,36 @@ int	lst_display(list *lst, int key1, int keynew)
 	return (1);
 }
 
+int	lst_del(list **p, list *el, int key, int keynew)
+{
+	key = 0; //useless
+	keynew = 0; //useless;
+
+	if (*p == el)
+	{
+		if (el->next == NULL)
+		{
+			free(el);
+			*p = NULL;
+			return (1);
+		}
+		return (0);
+	}
+	if (el->next == NULL)
+	{
+		free(*p);
+		free(el);
+		p = NULL;
+		return (1);
+	}
+	else
+	{
+		free(*p);
+		p = NULL;
+		return (0);
+	}
+}
+
 int	lst_add_before(list **p, list *el, int key1, int keynew)
 {
 	list    *new;
@@ -117,14 +147,16 @@ int	main()
 {
 	int	(*after)(list *, int, int);
 	int	(*before)(list **, list *, int, int);
+	int	(*delete_list)(list **, list *, int, int);
 	int	(*display)(list *, int, int);
-	//int	(*del)(list *, int, int);
 	list	*root;
 	list	*iter;
 
 	after = lst_add_after;
 	before = lst_add_before;
 	display = lst_display;
+	delete_list = lst_del;
+
 	root = create_elem(10);
 	iter = root;
 	lst_map(root, 0, 0, display);
@@ -138,5 +170,9 @@ int	main()
 	lst_map(root, 0, 0, display);
 	lst_map_root(&root, root, 12, 999999, before);
 	lst_map(root, 0, 0, display);
+	lst_map_root(&root, root, 0, 0, delete_list);
+	printf("\n");
+	lst_map(root, 0, 0, display);
+	printf("\n");
 	return (0);
 }
