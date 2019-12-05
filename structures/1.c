@@ -61,7 +61,7 @@ int	lst_display(list *lst, int key1, int keynew)
 	keynew = 0; //useless
 	if (lst)
 	{
-		printf("item: %d\n", lst->n);
+		printf("item: %d ", lst->n);
 		return (0);
 	}
 	return (1);
@@ -135,6 +135,68 @@ void	lst_map(list *elem, int key, int keynew, int (*f)(list *lst, int key1, int 
 	}
 }
 
+int	del_s(list **root)
+{
+	list	*tmp;
+
+	if (root)
+	{
+		tmp = *root;
+		if (tmp->next == NULL)
+		{
+			free(tmp);
+			*root = NULL;
+			return (1);
+		}
+		*root = tmp->next;
+		free(tmp);
+		return (1);
+	}
+	return (-1);
+}
+
+int	del_e(list **root)
+{
+	list	*tmp;
+	list	*tmp2;
+
+	if (root)
+	{
+		tmp = *root;
+		if (tmp->next == NULL)
+		{
+			free(tmp);
+			*root = NULL;
+			return (1);
+		}
+		while ((tmp->next)->next)
+			tmp = tmp->next;
+		tmp2 = tmp->next;
+		tmp->next = NULL;
+		free(tmp2);
+		return (1);
+	}
+	return (-1);
+}
+
+int	lst_keydel(list **root, list *lst, int key, int keynew)
+{
+	keynew = 0; //useless
+
+	if (key == lst->n)
+	{
+		if (*root == lst)
+			del_s(root);
+		else
+		{
+			(*root)->next = lst->next;
+			free(lst);
+		}
+		return (1);
+	}
+	return (0);
+}
+
 void	lst_map_root(list **root, list *elem, int key, int keynew, int (*f)(list **root, list *lst, int key1, int keynew))
 {
 	int	end = 1;
@@ -155,30 +217,80 @@ int	main()
 	int	(*before)(list **, list *, int, int);
 	int	(*delete_list)(list **, list *, int, int);
 	int	(*display)(list *, int, int);
+	int	(*keydel)(list **, list *, int, int);
 	list	*root;
-	list	*iter;
+	int	key;
+	int	keynew;
+	int	cmd = 0;
 
+	keydel = lst_keydel;
 	after = lst_add_after;
 	before = lst_add_before;
 	display = lst_display;
 	delete_list = lst_del;
 
-	root = create_elem(10);
-	iter = root;
-	lst_map(root, 0, 0, display);
-	lst_map(root, 10, 2, after);
-	lst_map(root, 0, 0, display);
-	lst_map(root, 10, 3, after);
-	lst_map(root, 0, 0, display);
-	lst_map(root, 2, 12, after);
-	lst_map(root, 0, 0, display);
-	lst_map_root(&root, root, 10, -228, before);
-	lst_map(root, 0, 0, display);
-	lst_map_root(&root, root, 12, 999999, before);
-	lst_map(root, 0, 0, display);
-	lst_map_root(&root, root, 0, 0, delete_list);
-	printf("\n");
-	lst_map(root, 0, 0, display);
-	printf("\n");
+	printf("Команды\n1 - создать список\n2 - вывести список\n3 - добавить элемент в конец\n4 - добавить элемент в начало\n5 - добавить элемент после ключа\n6 - добавить элемент до ключа\n7 - удалить список\n8 - удалить элемент по ключу\n9 - удалить элемент из начала\n10 - удалить элемент с конца\n");
+	while (1)
+	{
+		scanf("%d", &cmd);
+		switch(cmd)
+		{
+			case 1:
+				printf("ключ: ");
+				scanf("%d", &key);
+				printf("\n");
+				root = create_elem(key);
+				break;
+			case 2:
+				lst_map(root, 0, 0, display);
+				printf("\n");
+				break;
+			case 3:
+				printf("ключ: ");
+				scanf("%d", &key);
+				printf("\n");
+				add_e(root, key);
+				break;
+			case 4:
+				printf("ключ: ");
+				scanf("%d", &key);
+				printf("\n");
+				root = add_s(root, key);
+				break;
+			case 5:
+				printf("новый ключ: ");
+				scanf("%d", &keynew);
+				printf("\n");
+				printf("ключ: ");
+				scanf("%d", &key);
+				printf("\n");
+				lst_map(root, key, keynew, after);
+				break;
+			case 6:
+				printf("новый ключ: ");
+				scanf("%d", &keynew);
+				printf("\n");
+				printf("ключ: ");
+				scanf("%d", &key);
+				printf("\n");
+				lst_map_root(&root, root, key, keynew, before);
+				break;
+			case 7:
+				lst_map_root(&root, root, 0, 0, delete_list);
+				break;
+			case 8:
+				printf("ключ: ");
+				scanf("%d", &key);
+				printf("\n");
+				lst_map_root(&root, root, key, 0, keydel);
+				break;
+			case 9:
+				del_s(&root);
+				break;
+			case 10:
+				del_e(&root);
+				break;
+		}
+	}
 	return (0);
 }
