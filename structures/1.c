@@ -67,20 +67,23 @@ int	lst_display(list *lst, int key1, int keynew)
 	return (1);
 }
 
-int	lst_add_before(list **root, list *el, int key1, int keynew)
+int	lst_add_before(list **p, list *el, int key1, int keynew)
 {
 	list    *new;
-	list    *prev = NULL;
-	if (root)
-		prev = *root;
+	list	*prev;
+
+	if (*p == el)
+		prev = NULL;
+	else
+		prev = *p;
 	if (el->n == key1)
 	{
 		new = create_elem(keynew);
 		new->next = el;
-		if (prev != NULL)
+		if (prev)
 			prev->next = new;
 		else
-			*root = new;
+			*p = new;
 		return (1);
 	}
 	return (0);
@@ -94,6 +97,18 @@ void	lst_map(list *elem, int key, int keynew, int (*f)(list *lst, int key1, int 
 	while (elem->next && (!(end)))
 	{
 		end = (*f)(elem->next, key, keynew);
+		elem = elem->next;
+	}
+}
+
+void	lst_map_root(list **root, list *elem, int key, int keynew, int (*f)(list **root, list *lst, int key1, int keynew))
+{
+	int	end = 1;
+
+	end = (*f)(root, elem, key, keynew);
+	while (elem->next && (!(end)))
+	{
+		end = (*f)(&elem, elem->next, key, keynew);
 		elem = elem->next;
 	}
 }
@@ -118,6 +133,10 @@ int	main()
 	lst_map(root, 10, 3, after);
 	lst_map(root, 0, 0, display);
 	lst_map(root, 2, 12, after);
+	lst_map(root, 0, 0, display);
+	lst_map_root(&root, root, 10, -228, before);
+	lst_map(root, 0, 0, display);
+	lst_map_root(&root, root, 12, 999999, before);
 	lst_map(root, 0, 0, display);
 	return (0);
 }
