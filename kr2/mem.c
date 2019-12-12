@@ -1,6 +1,3 @@
-#include <stdlib.h>
-#include <stdio.h>
-
 char    *convert(const char * str)
 {
     char    *start = str;
@@ -121,9 +118,4 @@ char    *convert(const char * str)
     free(ans);
     ans = bbufans;
     return (ans);
-}
-
-int	main()
-{
-	printf("%s\n", convert("1010011"));	// 123
 }
