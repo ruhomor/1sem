@@ -125,5 +125,7 @@ char    *convert(const char * str)
 
 int	main()
 {
-	printf("%s\n", convert("1010011"));	// 123
+	char *lol;
+	printf("%s\n", lol = convert("1010011"));	// 123
+	free(lol);
 }
