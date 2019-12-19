@@ -1,6 +1,7 @@
-int foo2 (int * px, int * py)
+#include <unistd.h>
+
+int	main()
 {
-	int	sum = *px + *py;
-	printf("foo2 : res=%d x=%d y=%d\n", sum, ++*px, --*py);
-	return (sum);
+	write(1, "Cyberdyne\n", 10);
+	return (0);
 }

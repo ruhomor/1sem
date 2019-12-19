@@ -61,7 +61,7 @@ int	lst_display(list *lst, int key1, int keynew)
 	keynew = 0; //useless
 	if (lst)
 	{
-		printf("item: %d ", lst->n);
+		printf("-> %d ", lst->n);
 		return (0);
 	}
 	return (1);

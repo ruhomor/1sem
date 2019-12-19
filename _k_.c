@@ -1,21 +1,11 @@
 #include <stdio.h>
 #include <string.h>
 
-union			fu
-{
-	char		data[sizeof(float)];
-	float		fl;
-};
-
-union			du
-{
-	char		data[sizeof(double)];
-	double		db;
-};
-
-union			ldu
+union			u
 {
 	char		data[sizeof(long double)];
+	float		fl;
+	double		db;
 	long double	ldb;
 };
 
@@ -45,9 +35,7 @@ void			printnum(int sizebyte, char *data)
 
 int			main()
 {
-	union fu	uf;
-	union du	ud;
-	union ldu	uld;
+	union u		sov;
 	int		sizebyte;
 	char		t[7];
 
@@ -57,22 +45,27 @@ int			main()
 
 	if (strcmp(t, "float") == 0)
 	{
-		scanf("%f", &uf.fl);
+		scanf("%f", &sov.fl);
 		sizebyte = sizeof(float);
-		printnum(sizebyte, uf.data);
+		printnum(sizebyte, sov.data);
 	}
 	if (strcmp(t, "double") == 0)
 	{
-		scanf("%lf", &ud.db);
+		scanf("%lf", &sov.db);
 		sizebyte = sizeof(double);
-		printnum(sizebyte, ud.data);
+		printnum(sizebyte, sov.data);
 	}
 	if (strcmp(t, "long") == 0)
 	{
 		scanf("%s", t);
-		scanf("%Lf", &uld.ldb);
 		sizebyte = sizeof(long double);
-		printnum(sizebyte, uld.data);
+		while (sizebyte--)
+		{
+			sov.data[sizebyte] = 0;
+		}
+		scanf("%Lf", &sov.ldb);
+		sizebyte = sizeof(long double);
+		printnum(sizebyte, sov.data);
 	}
 	return (0);
 }
